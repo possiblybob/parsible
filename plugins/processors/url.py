@@ -1,20 +1,9 @@
-from plugins.outputs.statsd import output_statsd_count
+from plugins.outputs.tempodb import output_print_line
 
-def process_ajax(line):
+def process_nginx_collect(line):
     if 'path' in line.keys():
-        if line['path'].startswith('/ajax/'):
-            output_statsd_count('call.ajax')
-
-def process_api(line):
-    if 'path' in line.keys():
-        if line['path'].startswith('/api/'):
-            output_statsd_count('call.api')
-
-def process_os_and_user_agent_request(line):
-    if 'client' in line.keys():
-        user_agent, os = _get_platform(line['client'])
-        metric_name = 'browser_request.{0}.{1}'.format(user_agent, os)
-        output_statsd_count(metric_name)
+        if line['path'].startswith('/collect/'):
+            output_print_line(line)
 
 def _get_platform(user_agent_string):
     user_agent_string = user_agent_string.lower()
