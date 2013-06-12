@@ -10,26 +10,29 @@ def parse_nginx_collect(line):
             if v is None or v is "-":
                 continue
             if "request" in k:
-                if "?" in v:
-                    request = v.partition("?")
-                    path = request[0]
-                    query = request[2]
-                    result_set["path"] = path
-                    result_set["query"] = query
-
-                    # get querystring
-                    qs_values = urlparse.parse_qs(query)
-                    for tag, value in qs_values.iteritems():
-                        result_set[tag] = value[0]
-
-                    r.groupdict().pop(k)
+                if "?" not in v:
                     continue
-                else:
-                    result_set["path"] = r.groupdict().pop(k)
-                    continue
+                request = v.partition("?")
+                path = request[0]
+                query = request[2]
+                result_set["path"] = path
+                result_set["query"] = query
+
+                # get querystring
+                info = {}
+                qs_values = urlparse.parse_qs(query)
+                for tag, value in qs_values.iteritems():
+                    val = value[0]
+                    if tag.lower() == 'ref':
+                        try:
+                            val = urlparse.urlparse(val).netloc
+                        except:
+                            # invalid URL
+                            continue
+                    info[tag] = val
+                result_set["info"] = info
+
+                r.groupdict().pop(k)
+
             result_set[k] = r.groupdict().pop(k)
     return result_set
-
-
-
-
