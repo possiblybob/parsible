@@ -1,12 +1,13 @@
-from plugins.outputs.output_tempodb import output_print_line, output_tempodb_record
+from plugins.outputs.output_keen import output_keen_record
+from plugins.outputs.output_tempodb import output_tempodb_record
 
 def process_nginx_collect(line):
     if 'path' in line.keys():
         if line['path'].startswith('/collect/'):
             try:
-                output_tempodb_record(line)
+                output_keen_record(line)
             except Exception, ex:
-                print ex
+                print 'Exception: {ex}'.format(ex)
 
 def _get_platform(user_agent_string):
     user_agent_string = user_agent_string.lower()

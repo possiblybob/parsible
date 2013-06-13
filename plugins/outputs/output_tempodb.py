@@ -1,7 +1,7 @@
 """ emitting to TempoDB """
 
 import sys
-sys.path.append('~/Projects/env/tempo/lib/python2.7/site-packages/tempodb')
+sys.path.append('~/Projects/env/statistics/lib/python2.7/site-packages/tempodb')
 
 import json
 from datetime import datetime, timedelta
