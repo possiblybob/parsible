@@ -34,8 +34,9 @@ def output_keen_record(line):
 
     # TODO: CHECK TO MAKE SURE TAG IS AVAILABLE
     record['tag'] = info.get('tag')
+    records['guid'] = info.get('guid')
 
-    for key in ['guid', 'medium', 'source', 'aff', 'ref']:
+    for key in ['medium', 'source', 'aff', 'ref']:
         value = info.get(key, None)
         if value:
             if key in ['ref', 'referrer']:
@@ -48,8 +49,7 @@ def output_keen_record(line):
             record['info'][key] = value
 
     timestamp = _get_random_date().replace(tzinfo=pytz.utc)
-    print timestamp
-    print pprint(record)
+
     try:
         client.add_event(COLLECTION_EVENTS, record, timestamp)
     except Exception, ex:
